@@ -1,0 +1,23 @@
+@use "../../globals";
+
+$menu-icon-w: globals.$row-h;
+
+.row-menu {
+  height: $menu-icon-w;
+  max-width: $menu-icon-w;
+  border-radius: 6px;
+  background-color: #414144;
+  transition: max-width 300ms;
+  display: flex;
+  padding: 2px;
+  overflow: hidden;
+
+  &:hover {
+    // max-width: $menu-icon-w * 4;
+    max-width: 28px * 4;
+  }
+
+  img:hover {
+    transform: translate(-2px, -2px);
+  }
+}

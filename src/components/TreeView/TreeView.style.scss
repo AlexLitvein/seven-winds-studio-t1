@@ -1,0 +1,67 @@
+@use "../../globals";
+
+// $tree-li-height: 32px;
+$tree-li-height: globals.$row-h;
+
+.tree {
+  margin-left: 0;
+  // padding: 1em;
+  list-style: none;
+
+  &:first-child > li::before {
+    border: none;
+  }
+
+  div {
+    border: 1px solid brown;
+    height: $tree-li-height;
+    display: flex;
+  }
+
+  ul {
+    list-style: none;
+    position: relative;
+    margin-left: 1em;
+
+    &::before {
+      border-left: 1px solid;
+      content: "";
+      height: 100%;
+      position: absolute;
+    }
+
+    li {
+      padding: 0 0 0 #{$tree-li-height/2};
+      position: relative;
+
+      &::before {
+        border-top: 1px solid;
+        content: "";
+        left: 0;
+        // margin-top: $tree-li-height/2;
+        top: $tree-li-height/2;
+        position: absolute;
+        width: $tree-li-height/2;
+      }
+
+      &:last-child::before {
+        background: globals.$app-bck-gnd;
+        bottom: 0;
+        // top: $tree-li-height/2;
+        // top: 0;
+      }
+    }
+  }
+}
+
+// .fullHeight {
+//   height: 100%;
+//   transition: height 300ms;
+// }
+
+.hide {
+  // height: 0;
+  transition: 300ms;
+  transform: scale(1, 0);
+  transform-origin: top;
+}
