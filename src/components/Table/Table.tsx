@@ -5,13 +5,13 @@ import { TreeView } from "../TreeView";
 
 // import { IHeaderProps } from "./Header.types";
 
-export const Table = ({ data, children }: ITableProps) => {
+export const Table = ({ data }: ITableProps) => {
   return (
     <div className="table">
       <div className="tree-panel">
         <TreeView data={data} />
       </div>
-      <div className="data-panel">{children}</div>
+      <div className="data-panel"></div>
     </div>
   );
 };

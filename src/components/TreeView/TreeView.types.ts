@@ -1,7 +1,15 @@
 import { Entity } from "../../App";
+import { IFetchData } from "../../fetch";
 
 export interface ITreeViewProps {
-  data: Entity[];
+  data: IFetchData[];
+  // data: Entity[];
+}
+
+export interface ITreeItemProps {
+  data: IFetchData;
+  level: number;
+  onClick: (idElm: string, data: IFetchData) => void;
 }
 
 export interface IRowMenuProps {
@@ -9,10 +17,4 @@ export interface IRowMenuProps {
   isNode: boolean;
   // onClick: (level:number, event: React.MouseEvent<HTMLImageElement>) => void;
   onClick: (event: React.MouseEvent<HTMLImageElement>) => void;
-}
-
-export interface ITreeItemProps {
-  data: Entity;
-  level: number;
-  onClick: (idElm: string, data: Entity) => void;
 }

@@ -58,32 +58,7 @@ function App() {
       {/* <RowMenu /> */}
       {/* <TreeView data={treeData} /> */}
 
-      <Table data={treeData}>
-        <Row>
-          <Cell>1000</Cell>
-          <Cell>10 000 000.555</Cell>
-          <Cell>21</Cell>
-          <Cell>23 250</Cell>
-        </Row>
-        <Row>
-          <Cell>10 000 000.555</Cell>
-          <Cell>1000</Cell>
-          <Cell>23 250</Cell>
-          <Cell>21</Cell>
-        </Row>
-        <Row>
-          <Cell>21.5</Cell>
-          <Cell>10 000 000.555</Cell>
-          <Cell>1000</Cell>
-          <Cell>23 250</Cell>
-        </Row>
-        <Row>
-          <Cell>23 250</Cell>
-          <Cell>21</Cell>
-          <Cell>10 000 000.555</Cell>
-          <Cell>1000</Cell>
-        </Row>
-      </Table>
+      <Table data={treeData} />
     </div>
   );
 }
