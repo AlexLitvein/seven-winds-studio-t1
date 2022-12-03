@@ -4,12 +4,16 @@ import { IFetchData } from "../../fetch";
 export interface ITreeViewProps {
   data: IFetchData[];
   // data: Entity[];
+  // onClick: (idHtmlElm: string, gIdx: number, data: IFetchData) => void;
+  onClick: (idHtmlElm: string, data: IFetchData) => void;
 }
 
 export interface ITreeItemProps {
   data: IFetchData;
   level: number;
-  onClick: (idElm: string, data: IFetchData) => void;
+  // i: number;
+  // onClick: (idHtmlElm: string, gIdx: number, data: IFetchData) => void;
+  onClick: (idHtmlElm: string, data: IFetchData) => void;
 }
 
 export interface IRowMenuProps {

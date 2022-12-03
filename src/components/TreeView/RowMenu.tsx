@@ -13,18 +13,21 @@ export const RowMenu = ({ level, isNode, onClick }: IRowMenuProps) => {
         <img src={folder1} alt="" />
       </button> */}
 
-      {isNode && level === 0 && (
+      {/* {isNode && level === 0 && (
         <img id="folder1" src={folder1} alt="" onClick={onClick} />
-      )}
+      )} */}
 
       {isNode && (
-        <img
-          id="folder2"
-          src={folder2}
-          alt=""
-          // onClick={level !== 0 ? onClick : () => {}}
-          onClick={onClick}
-        />
+        <>
+          <img id="folder1" src={folder1} alt="" onClick={onClick} />
+          <img
+            id="folder2"
+            src={folder2}
+            alt=""
+            // onClick={level !== 0 ? onClick : () => {}}
+            onClick={onClick}
+          />
+        </>
       )}
 
       <img id="doc" src={doc} alt="" onClick={onClick} />
@@ -38,4 +41,36 @@ export const RowMenu = ({ level, isNode, onClick }: IRowMenuProps) => {
       />
     </div>
   );
+
+  // return (
+  //   <div className="row-menu">
+  //     {/* <button>
+  //       <img src={folder1} alt="" />
+  //     </button> */}
+
+  //     {isNode && level === 0 && (
+  //       <img id="folder1" src={folder1} alt="" onClick={onClick} />
+  //     )}
+
+  //     {isNode && (
+  //       <img
+  //         id="folder2"
+  //         src={folder2}
+  //         alt=""
+  //         // onClick={level !== 0 ? onClick : () => {}}
+  //         onClick={onClick}
+  //       />
+  //     )}
+
+  //     <img id="doc" src={doc} alt="" onClick={onClick} />
+
+  //     <img
+  //       id="del"
+  //       src={trash}
+  //       alt=""
+  //       style={{ margin: "auto", width: "24px", height: "20px" }}
+  //       onClick={onClick}
+  //     />
+  //   </div>
+  // );
 };

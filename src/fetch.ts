@@ -16,21 +16,24 @@ export interface IFetchData {
   child: IFetchData[];
 }
 
-export const createFakeData = (): IFetchData => ({
-  id: randomInRange(1, 1000),
-  rowName: genRandonString(5),
-  total: randomInRange(1, 100000),
-  salary: randomInRange(1, 100),
-  mimExploitation: randomInRange(1, 10000),
-  machineOperatorSalary: randomInRange(1, 1000),
-  materials: randomInRange(1, 10000000),
-  mainCosts: randomInRange(1, 100000),
-  supportCosts: randomInRange(1, 1000),
-  equipmentCosts: randomInRange(1, 10000),
-  overheads: randomInRange(1, 100),
-  estimatedProfit: randomInRange(1, 100000),
-  child: [],
-});
+let id = 0;
+export const createFakeData = (): IFetchData => {
+  return {
+    id: id++,
+    rowName: genRandonString(5),
+    total: randomInRange(1, 100000),
+    salary: randomInRange(1, 100),
+    mimExploitation: randomInRange(1, 10000),
+    machineOperatorSalary: randomInRange(1, 1000),
+    materials: randomInRange(1, 10000000),
+    mainCosts: randomInRange(1, 100000),
+    supportCosts: randomInRange(1, 1000),
+    equipmentCosts: randomInRange(1, 10000),
+    overheads: randomInRange(1, 100),
+    estimatedProfit: randomInRange(1, 100000),
+    child: [],
+  };
+};
 
 export function fetchData(startData: Date, range: number) {
   const endData = new Date(startData);
