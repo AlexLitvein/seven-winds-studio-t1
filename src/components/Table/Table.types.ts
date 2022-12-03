@@ -10,8 +10,11 @@ export interface ITableProps {
 
 export interface IRowProps {
   //  tag: string;
-  //  sx?: SxProps;
-  children?: React.ReactNode;
+  //   data: IFetchData;
+  //   cells: React.ReactNode;
+  data: (string | number)[];
+  // childs: IFetchData[];
+  //   children?: React.ReactNode;
 }
 
 export interface ICellProps {

@@ -32,6 +32,12 @@ export const TreeView = ({ data }: ITreeViewProps) => {
 
   return (
     <ul className="tree">
+      <TreeItem
+        key={-1}
+        data={{ rowName: "Level", child: [] as IFetchData[] } as IFetchData}
+        level={0}
+        onClick={onItemMenuClick}
+      />
       {data.map((el, idx) => {
         return (
           <TreeItem key={idx} data={el} level={0} onClick={onItemMenuClick} />
@@ -65,21 +71,10 @@ export const TreeItem = ({ data, level, onClick }: ITreeItemProps) => {
             if (!event.currentTarget.previousElementSibling) {
               set_isHidden(!isHidden);
             } else {
-              // console.log("onClick: ");
               onClick(event.currentTarget.id, data);
             }
-
-            // console.log({
-            //   event_log: event.currentTarget.id, //.previousElementSibling,
-            //   previousElementSibling:
-            //     event.currentTarget.previousElementSibling,
-            // });
-            // set_cls(cls ? "" : "hide");
-            // setTimeout(() => {
-            //   set_isHidden(!isHidden);
-            // }, 300);
           }}
-        />{" "}
+        />
         {data.rowName}
       </div>
       {!isHidden && data.child.length !== 0 && (
