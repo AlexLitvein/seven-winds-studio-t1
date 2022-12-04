@@ -1,11 +1,6 @@
-import { Entity } from "../../App";
 import { IFetchData } from "../../fetch";
 
 // export type Selected=[IFetchData | undefined, IFetchData | IFetchData[] | undefined];
-export type Selected = {
-  elm: IFetchData | undefined;
-  parent: IFetchData | IFetchData[] | undefined;
-};
 
 export interface ITreeViewProps {
   data: IFetchData[];

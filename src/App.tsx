@@ -1,10 +1,9 @@
 import React from "react";
 import "./App.scss";
 import { Header } from "./components/header";
-import { Table, Row, Cell } from "./components/Table";
-import { TreeView } from "./components/TreeView";
-import { RowMenu } from "./components/TreeView/RowMenu";
+import { TableView } from "./components/TableView/TableView";
 import { createFakeData, IFetchData } from "./fetch";
+import { Table } from "./Table";
 // import { TreeView, RowMenu, Row, Table, Cell } from "./components/TreeView";
 
 // {
@@ -35,15 +34,15 @@ import { createFakeData, IFetchData } from "./fetch";
 // },
 
 // 185.244.172.108:8081
-const entity = {
-  id: 31336,
-  rowName: "dd58a48a-9924-4f76-a605-ad213c5b41a8",
-};
+// const entity = {
+//   id: 31336,
+//   rowName: "dd58a48a-9924-4f76-a605-ad213c5b41a8",
+// };
 
-export type Entity = {
-  name: string;
-  child: Entity[];
-};
+// export type Entity = {
+//   name: string;
+//   child: Entity[];
+// };
 
 const treeData: IFetchData[] = [createFakeData(), createFakeData()];
 
@@ -51,11 +50,7 @@ treeData[0].child.push(createFakeData());
 treeData[0].child.push(createFakeData());
 treeData[0].child.push(createFakeData());
 
-const { child, ...objData } = treeData[0];
-// const firstObj: Record<string, unknown> = { ...treeData[0] };
-// (Object.keys(firstObj) as Array<keyof typeof firstObj>).forEach((el) => {
-//   firstObj[el] = el;
-// });
+const tbl = new Table(treeData);
 
 function App() {
   return (
@@ -65,7 +60,8 @@ function App() {
       {/* <TreeView data={treeData} /> */}
 
       {/* <Table columnsNamesObj={treeData[0]} data={treeData} /> */}
-      <Table columnsNames={Object.keys(objData)} data={treeData} />
+      {/* <TableView columnsNames={tbl.columnsName} data={treeData} /> */}
+      <TableView table={tbl} data={treeData} />
     </div>
   );
 }

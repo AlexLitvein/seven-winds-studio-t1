@@ -58,6 +58,10 @@ $table-row-h: 32px;
   &-selected {
     background-color: rgb(92, 179, 219);
   }
+
+  input {
+    width: 100%;
+  }
 }
 
 // .cell {

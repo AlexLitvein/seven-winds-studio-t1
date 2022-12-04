@@ -1,31 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  ITableProps,
-  IRowProps,
-  ICellProps,
-  ITableHeaderProps,
-} from "./Table.types";
-import "./Table.style.scss";
-import { TreeView } from "../TreeView";
-import { createFakeData, IFetchData } from "../../fetch";
-import { Selected } from "../TreeView/TreeView.types";
+import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { ITableProps, IRowProps, ICellProps, ITableHeaderProps, CellClick } from './TableView.types';
+import './TableView.style.scss';
+import { TreeView } from '../TreeView';
+import { createFakeData, IFetchData } from '../../fetch';
 
-export const Table = ({ columnsNames, data }: ITableProps) => {
+export const TableView = ({ table, data }: ITableProps) => {
   let key = 0;
-  // const { child, ...firstData } = data[0];
   let [trig, set_trig] = useState(false); // только для отрисовки
-  // let [selectedData, set_selectedData] = useState<IFetchData | undefined>(
-  // TODO: rename
-  let [selectedData, set_selectedData] = useState<Selected>({
-    elm: undefined,
-    parent: undefined,
-  });
-  let [hiddenData, set_hiddenData] = useState<Selected>({
-    elm: undefined,
-    parent: undefined,
-  });
 
-  console.log("Table->", {
+  console.log('Table->', {
     data,
   });
 
@@ -82,15 +65,17 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
   //   []
   // );
 
-  const onRowClick = (row: IFetchData) => {
-    set_selectedData({ elm: row, parent: undefined });
+  const onCellClick: CellClick = (
+    cellName: string,
+    value: string | number,
+    row: IFetchData | undefined,
+    isDblClick: boolean
+  ) => {
+    table.selectedData = { row, cellName, isEdit: isDblClick };
+    set_trig(!trig);
   };
 
-  const onTreeViewItemMenuClick = (
-    idElm: string,
-    elm: IFetchData,
-    parent: IFetchData | IFetchData[] | undefined
-  ) => {
+  const onTreeViewItemMenuClick = (idElm: string, elm: IFetchData, parent: IFetchData | IFetchData[] | undefined) => {
     console.log({
       idElm,
       elm,
@@ -98,14 +83,18 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
     });
 
     switch (idElm) {
-      case "folder1":
-        set_hiddenData((prev) => ({
-          elm: prev.elm?.id !== elm.id ? elm : undefined,
+      case 'folder1':
+        // set_hiddenData((prev) => ({
+        //   elm: prev.elm?.id !== elm.id ? elm : undefined,
+        //   parent,
+        // }));
+        table.hiddenData = {
+          elm: table.hiddenData.elm?.id !== elm.id ? elm : undefined,
           parent,
-        }));
+        };
         break;
 
-      case "folder2":
+      case 'folder2':
         const tmp = createFakeData();
         tmp.child.push(createFakeData());
         if (parent) {
@@ -115,7 +104,7 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
         }
         break;
 
-      case "doc":
+      case 'doc':
         // elm.child.length !== 0 && elm.child.push(createFakeData());
 
         if (parent) {
@@ -125,7 +114,7 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
         }
         break;
 
-      case "del":
+      case 'del':
         let whereFind: IFetchData[] | undefined = undefined;
         if (Array.isArray(parent)) {
           whereFind = parent;
@@ -136,7 +125,8 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
         if (whereFind) {
           const idx = whereFind.findIndex((el) => el.id === elm?.id);
           idx !== undefined && whereFind.splice(idx, 1);
-          set_hiddenData({ elm: undefined, parent: undefined });
+          // set_hiddenData({ elm: undefined, parent: undefined });
+          table.hiddenData = { elm: undefined, parent: undefined };
         }
         break;
 
@@ -152,7 +142,8 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
 
     // console.log({
     //   data_id: data.id,
-    //   selectedData_id: selectedData?.id,
+    //   table,
+    //   // selectedData_id: selectedData?.id,
     // });
 
     return (
@@ -161,22 +152,24 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
         <Row
           key={key}
           data={data}
-          onClick={onRowClick}
-          isSelected={selectedData.elm?.id === data.id}
+          onClick={onCellClick}
+          // isSelected={selectedData.elm?.id === data.id}
+          // isSelected={table.selectedData.row?.id === data.id}
+          selData={table.selectedData}
+          // selectedCellName={table.selectedData.cellName}
         />
-        {hiddenData.elm?.id !== data.id &&
-          child.map((el, idx) => renderRow(key++, el))}
+        {table.hiddenData.elm?.id !== data.id && child.map((el, idx) => renderRow(key++, el))}
       </>
     );
   };
 
   return (
-    <div className="table">
-      <div className="tree-panel">
+    <div className='table'>
+      <div className='tree-panel'>
         <TreeView data={data} onClick={onTreeViewItemMenuClick} />
       </div>
-      <div className="data-panel">
-        <TableHeader data={columnsNames} />
+      <div className='data-panel'>
+        <TableHeader data={table.columnsNames} />
         {data.map((el, idx) => {
           return renderRow(key++, el); //INFO: ++ именно тут
         })}
@@ -185,32 +178,27 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
   );
 };
 
-export const Row = ({ data, isSelected, onClick }: IRowProps) => {
+export const Row = ({
+  data,
+  selData,
+  // isSelected,
+  // selectedCellName,
+  onClick,
+}: IRowProps) => {
   const { child, ...objData } = data;
-  let [selectedCell, set_selectedCell] = useState("");
-
-  const onCellClick = (
-    name: string,
-    row: IFetchData | undefined,
-    value: string | number
-  ) => {
-    set_selectedCell(name);
-  };
 
   return (
-    <div
-      className={`row${isSelected ? " row-selected" : ""}`}
-      onClick={() => onClick(data)}
-    >
+    <div className={`row${selData.row?.id === data.id ? ' row-selected' : ''}`}>
       {(Object.keys(objData) as Array<keyof typeof objData>).map((el, idx) => {
         return (
           <Cell
             key={idx}
-            onClick={onCellClick}
+            onClick={onClick}
             name={el}
             row={data}
-            isSelected={selectedCell === el}
+            isSelected={selData.cellName === el}
             value={objData[el]}
+            isEdit={selData.row?.id === data.id && selData.cellName === el && selData.isEdit}
           />
         );
       })}
@@ -220,7 +208,7 @@ export const Row = ({ data, isSelected, onClick }: IRowProps) => {
 
 export const TableHeader = ({ data }: ITableHeaderProps) => {
   return (
-    <div className="row">
+    <div className='row'>
       {data.map((el, idx) => (
         <Cell
           key={idx}
@@ -229,21 +217,35 @@ export const TableHeader = ({ data }: ITableHeaderProps) => {
           value={el}
           isSelected={false}
           row={undefined}
+          isEdit={false}
         />
       ))}
     </div>
   );
 };
 
-export const Cell = ({ name, row, isSelected, value, onClick }: ICellProps) => {
+export const Cell = ({ name, row, isSelected, isEdit, value, onClick }: ICellProps) => {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.key === 'Enter') {
+      // setUpdated(message);
+      console.log('onKeyDown');
+    }
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    // setInputValue(event.target.value);
+    console.log('change');
+  };
+
   return (
-    // <div id={name} className="column">
     <div
       id={name}
-      className={`column${isSelected ? " column-selected" : ""}`}
-      onClick={() => onClick(name, row, value)}
+      // className={`column${isSelected && !isEdit ? " column-selected" : ""}`}
+      className={`column${isSelected ? ' column-selected' : ''}`}
+      onClick={() => onClick(name, value, row, false)}
+      onDoubleClick={() => onClick(name, value, row, true)}
     >
-      {value}
+      {isEdit ? <input type='text' autoFocus value={value} onChange={handleChange} onKeyDown={handleKeyDown} /> : value}
     </div>
   );
 };
