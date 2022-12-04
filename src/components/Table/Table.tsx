@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { ITableProps, IRowProps, ICellProps } from "./Table.types";
+import {
+  ITableProps,
+  IRowProps,
+  ICellProps,
+  ITableHeaderProps,
+} from "./Table.types";
 import "./Table.style.scss";
 import { TreeView } from "../TreeView";
 import { createFakeData, IFetchData } from "../../fetch";
@@ -12,6 +17,10 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
   // let [selectedData, set_selectedData] = useState<IFetchData | undefined>(
   // TODO: rename
   let [selectedData, set_selectedData] = useState<Selected>({
+    elm: undefined,
+    parent: undefined,
+  });
+  let [hiddenData, set_hiddenData] = useState<Selected>({
     elm: undefined,
     parent: undefined,
   });
@@ -73,7 +82,11 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
   //   []
   // );
 
-  const onItemMenuClick = (
+  const onRowClick = (row: IFetchData) => {
+    set_selectedData({ elm: row, parent: undefined });
+  };
+
+  const onTreeViewItemMenuClick = (
     idElm: string,
     elm: IFetchData,
     parent: IFetchData | IFetchData[] | undefined
@@ -86,7 +99,7 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
 
     switch (idElm) {
       case "folder1":
-        set_selectedData((prev) => ({
+        set_hiddenData((prev) => ({
           elm: prev.elm?.id !== elm.id ? elm : undefined,
           parent,
         }));
@@ -123,7 +136,7 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
         if (whereFind) {
           const idx = whereFind.findIndex((el) => el.id === elm?.id);
           idx !== undefined && whereFind.splice(idx, 1);
-          set_selectedData({ elm: undefined, parent: undefined });
+          set_hiddenData({ elm: undefined, parent: undefined });
         }
         break;
 
@@ -145,8 +158,13 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
     return (
       //INFO: из-за этого (<></>)-> Warning: Each child in a list should have a unique "key" prop
       <>
-        <Row key={key} data={Object.values(dataObj)} />
-        {selectedData.elm?.id !== data.id &&
+        <Row
+          key={key}
+          data={data}
+          onClick={onRowClick}
+          isSelected={selectedData.elm?.id === data.id}
+        />
+        {hiddenData.elm?.id !== data.id &&
           child.map((el, idx) => renderRow(key++, el))}
       </>
     );
@@ -155,11 +173,10 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
   return (
     <div className="table">
       <div className="tree-panel">
-        <TreeView data={data} onClick={onItemMenuClick} />
+        <TreeView data={data} onClick={onTreeViewItemMenuClick} />
       </div>
       <div className="data-panel">
-        {/* <Row data={Object.keys(firstData)} /> */}
-        <Row data={columnsNames} />
+        <TableHeader data={columnsNames} />
         {data.map((el, idx) => {
           return renderRow(key++, el); //INFO: ++ именно тут
         })}
@@ -168,16 +185,65 @@ export const Table = ({ columnsNames, data }: ITableProps) => {
   );
 };
 
-export const Row = ({ data }: IRowProps) => {
+export const Row = ({ data, isSelected, onClick }: IRowProps) => {
+  const { child, ...objData } = data;
+  let [selectedCell, set_selectedCell] = useState("");
+
+  const onCellClick = (
+    name: string,
+    row: IFetchData | undefined,
+    value: string | number
+  ) => {
+    set_selectedCell(name);
+  };
+
+  return (
+    <div
+      className={`row${isSelected ? " row-selected" : ""}`}
+      onClick={() => onClick(data)}
+    >
+      {(Object.keys(objData) as Array<keyof typeof objData>).map((el, idx) => {
+        return (
+          <Cell
+            key={idx}
+            onClick={onCellClick}
+            name={el}
+            row={data}
+            isSelected={selectedCell === el}
+            value={objData[el]}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+export const TableHeader = ({ data }: ITableHeaderProps) => {
   return (
     <div className="row">
       {data.map((el, idx) => (
-        <Cell key={idx}>{el}</Cell>
+        <Cell
+          key={idx}
+          onClick={() => {}}
+          name={el.toString()}
+          value={el}
+          isSelected={false}
+          row={undefined}
+        />
       ))}
     </div>
   );
 };
 
-export const Cell = ({ children }: ICellProps) => {
-  return <div className="column">{children}</div>;
+export const Cell = ({ name, row, isSelected, value, onClick }: ICellProps) => {
+  return (
+    // <div id={name} className="column">
+    <div
+      id={name}
+      className={`column${isSelected ? " column-selected" : ""}`}
+      onClick={() => onClick(name, row, value)}
+    >
+      {value}
+    </div>
+  );
 };

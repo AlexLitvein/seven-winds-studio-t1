@@ -1,25 +1,31 @@
-import { Entity } from "../../App";
-import { IFetchData } from "../../fetch";
+import { IFetchData, IFetchObjData } from "../../fetch";
 
 export interface ITableProps {
-  //  tag: string;
-  //  sx?: SxProps;
   columnsNames: string[];
   data: IFetchData[];
-  //   children?: React.ReactNode;
 }
 
 export interface IRowProps {
-  //  tag: string;
-  //   data: IFetchData;
-  //   cells: React.ReactNode;
+  //   data: (string | number)[];
+  data: IFetchData;
+  isSelected: boolean;
+  onClick: (row: IFetchData) => void;
+}
+
+export interface ITableHeaderProps {
   data: (string | number)[];
-  // childs: IFetchData[];
-  //   children?: React.ReactNode;
+  //   onClick:(value: string|number)=>void;
 }
 
 export interface ICellProps {
-  //  tag: string;
-  //  sx?: SxProps;
-  children?: React.ReactNode;
+  name: string;
+  row: IFetchData | undefined;
+  isSelected: boolean;
+  //   children?: React.ReactNode;
+  value: string | number;
+  onClick: (
+    name: string,
+    row: IFetchData | undefined,
+    value: string | number
+  ) => void;
 }

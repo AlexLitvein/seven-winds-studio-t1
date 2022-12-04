@@ -16,6 +16,8 @@ export interface IFetchData {
   child: IFetchData[];
 }
 
+export interface IFetchObjData extends Omit<IFetchData, "child"> {}
+
 const findDataById = (dataId: number, data: IFetchData) => {
   let out: undefined | IFetchData = undefined;
   if (data.id === dataId) {
