@@ -40,6 +40,9 @@ $table-row-h: 32px;
   //     //   min-width: $menu-icon-w * 4;
   //     //   max-width: $menu-icon-w * 4;
   //   }
+  &-selected {
+    background-color: rgb(83, 189, 97);
+  }
 }
 
 .column {
@@ -51,6 +54,10 @@ $table-row-h: 32px;
   border: 1px dotted yellow;
   overflow: hidden;
   white-space: nowrap;
+
+  &-selected {
+    background-color: rgb(92, 179, 219);
+  }
 }
 
 // .cell {

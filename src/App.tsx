@@ -51,6 +51,12 @@ treeData[0].child.push(createFakeData());
 treeData[0].child.push(createFakeData());
 treeData[0].child.push(createFakeData());
 
+const { child, ...objData } = treeData[0];
+// const firstObj: Record<string, unknown> = { ...treeData[0] };
+// (Object.keys(firstObj) as Array<keyof typeof firstObj>).forEach((el) => {
+//   firstObj[el] = el;
+// });
+
 function App() {
   return (
     <div className="App">
@@ -58,7 +64,8 @@ function App() {
       {/* <RowMenu /> */}
       {/* <TreeView data={treeData} /> */}
 
-      <Table data={treeData} />
+      {/* <Table columnsNamesObj={treeData[0]} data={treeData} /> */}
+      <Table columnsNames={Object.keys(objData)} data={treeData} />
     </div>
   );
 }
