@@ -16,6 +16,34 @@ export interface IFetchData {
   child: IFetchData[];
 }
 
+const findDataById = (dataId: number, data: IFetchData) => {
+  let out: undefined | IFetchData = undefined;
+  if (data.id === dataId) {
+    out = data;
+  } else {
+    if (data.child.length !== 0) {
+      data.child.forEach((el) => {
+        out = findDataById(dataId, el);
+      });
+    }
+  }
+  return out;
+};
+
+const findParentByDataId = (dataId: number, data: IFetchData[]) => {
+  let out: undefined | IFetchData[] = undefined;
+
+  data.forEach((el) => {
+    const res = findDataById(dataId, el);
+    if (res) {
+      if (res?.id === el.id) {
+        out = data;
+      } else out = el.child;
+    }
+  });
+  return out;
+};
+
 let id = 0;
 export const createFakeData = (): IFetchData => {
   return {

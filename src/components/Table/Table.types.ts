@@ -4,6 +4,7 @@ import { IFetchData } from "../../fetch";
 export interface ITableProps {
   //  tag: string;
   //  sx?: SxProps;
+  columnsNames: string[];
   data: IFetchData[];
   //   children?: React.ReactNode;
 }

@@ -51,6 +51,8 @@ treeData[0].child.push(createFakeData());
 treeData[0].child.push(createFakeData());
 treeData[0].child.push(createFakeData());
 
+const { child, ...firstData } = treeData[0];
+
 function App() {
   return (
     <div className="App">
@@ -58,7 +60,7 @@ function App() {
       {/* <RowMenu /> */}
       {/* <TreeView data={treeData} /> */}
 
-      <Table data={treeData} />
+      <Table columnsNames={Object.keys(firstData)} data={treeData} />
     </div>
   );
 }

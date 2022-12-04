@@ -10,6 +10,7 @@ export const TreeView = ({ data, onClick }: ITreeViewProps) => {
       <TreeItem
         key={-1}
         data={{ rowName: "Level", child: [] as IFetchData[] } as IFetchData}
+        parent={undefined}
         level={0}
         // i={gIdx}
         onClick={onClick}
@@ -19,6 +20,7 @@ export const TreeView = ({ data, onClick }: ITreeViewProps) => {
           <TreeItem
             key={idx}
             data={el}
+            parent={data}
             level={0}
             // i={++gIdx}
             onClick={onClick}
@@ -29,7 +31,7 @@ export const TreeView = ({ data, onClick }: ITreeViewProps) => {
   );
 };
 
-export const TreeItem = ({ data, level, onClick }: ITreeItemProps) => {
+export const TreeItem = ({ data, parent, level, onClick }: ITreeItemProps) => {
   let [isHidden, set_isHidden] = useState(false);
   // let [cls, set_cls] = useState("");
   // let [gi, set_gi] = useState(gIdx++);
@@ -39,19 +41,12 @@ export const TreeItem = ({ data, level, onClick }: ITreeItemProps) => {
       <div>
         <RowMenu
           level={level++}
-          isNode={data.child.length !== 0}
+          isNode={data.child.length !== 0 || parent === undefined}
           onClick={(event) => {
-            // if (!event.currentTarget.previousElementSibling) {
-            //   set_isHidden(!isHidden);
-            // }
-            // else {
-            //   onClick(event.currentTarget.id, data);
-            // }
-
             if (event.currentTarget.id === "folder1") {
               set_isHidden(!isHidden);
             }
-            onClick(event.currentTarget.id, data);
+            onClick(event.currentTarget.id, data, parent);
           }}
         />
         {data.rowName}
@@ -62,6 +57,7 @@ export const TreeItem = ({ data, level, onClick }: ITreeItemProps) => {
             <TreeItem
               key={idx}
               data={el}
+              parent={data}
               level={level}
               // i={++gIdx}
               onClick={onClick}
