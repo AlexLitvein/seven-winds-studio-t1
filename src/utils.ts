@@ -19,8 +19,8 @@ const findDataById = (dataId: number, data: IFetchData) => {
   if (data.id === dataId) {
     out = data;
   } else {
-    if (data.child.length !== 0) {
-      data.child.forEach((el) => {
+    if (data.child?.length !== 0) {
+      data.child?.forEach((el) => {
         out = findDataById(dataId, el);
       });
     }

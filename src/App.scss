@@ -1,7 +1,22 @@
-@use "./globals";
+@use './globals';
 
 .App {
   height: 100vh;
   background-color: globals.$app-bck-gnd;
   color: white;
+}
+
+.table-view {
+  display: flex;
+  padding: 0.5em;
+}
+
+.data-panel {
+  display: flex;
+  // flex-direction: column;
+  flex: 1 1 auto;
+  // gap: 0.5em;
+}
+
+.tree-panel {
 }

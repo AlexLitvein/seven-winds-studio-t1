@@ -1,26 +1,49 @@
 import { IFetchData } from '../../api/api.types';
 
-// export type Selected=[IFetchData | undefined, IFetchData | IFetchData[] | undefined];
+// export interface ITreeViewProps {
+//   data: IFetchData[];
+//   onClick: (idHtmlElm: string, data: IFetchData, parent: IFetchData | IFetchData[] | undefined) => void;
+// }
 
-export interface ITreeViewProps {
-  data: IFetchData[];
-  // data: Entity[];
-  // onClick: (idHtmlElm: string, gIdx: number, data: IFetchData) => void;
-  onClick: (idHtmlElm: string, data: IFetchData, parent: IFetchData | IFetchData[] | undefined) => void;
+// export interface ITreeItemProps {
+//   data: IFetchData;
+//   parent: IFetchData | IFetchData[] | undefined;
+//   level: number;
+//   onClick: (idHtmlElm: string, data: IFetchData, parent: IFetchData | IFetchData[] | undefined) => void;
+// }
+
+// export interface IRowMenuProps {
+//   level: number;
+//   isNode: boolean;
+//   onClick: (event: React.MouseEvent<HTMLImageElement>) => void;
+// }
+
+// export interface TreeViewDataDef {
+//   nameField: string;
+//   childField: string;
+// }
+
+export interface TreeViewDataDef<T> {
+  nameField: keyof T;
+  childField: keyof T;
 }
 
-export interface ITreeItemProps {
-  data: IFetchData;
-  parent: IFetchData | IFetchData[] | undefined;
+export interface ITreeViewProps<T = Record<string, any>> {
+  dataDef: TreeViewDataDef<T>;
+  data: T[];
+  onClick: (idHtmlElm: string, data: T, parent: T | T[] | undefined) => void;
+}
+
+export interface ITreeItemProps<T = Record<string, any>> {
+  dataDef: TreeViewDataDef<T>;
+  data: T;
+  parent: T | T[] | undefined;
   level: number;
-  // i: number;
-  // onClick: (idHtmlElm: string, gIdx: number, data: IFetchData) => void;
-  onClick: (idHtmlElm: string, data: IFetchData, parent: IFetchData | IFetchData[] | undefined) => void;
+  onClick: (idHtmlElm: string, data: T, parent: T | T[] | undefined) => void;
 }
 
 export interface IRowMenuProps {
   level: number;
   isNode: boolean;
-  // onClick: (level:number, event: React.MouseEvent<HTMLImageElement>) => void;
   onClick: (event: React.MouseEvent<HTMLImageElement>) => void;
 }

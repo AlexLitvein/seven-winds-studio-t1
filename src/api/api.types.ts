@@ -14,8 +14,8 @@ const FetchDataStub = {
 };
 
 type IFetchDataStub = typeof FetchDataStub;
-export interface IFetchData extends IFetchDataStub {
-  child: IFetchData[];
+export interface IFetchData extends Partial<IFetchDataStub> {
+  child?: IFetchData[];
 }
 export type FetchDataKey = keyof IFetchData;
 

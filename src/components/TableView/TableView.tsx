@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { ITableProps, IRowProps, ICellProps, ITableHeaderProps, CellClickCb, ICellIputProps } from './TableView.types';
 import './TableView.style.scss';
-import { TreeView } from '../TreeView';
-import { createFakeData } from '../../utils';
 import { IFetchData } from '../../api/api.types';
 
 export const TableView = ({ table }: ITableProps<IFetchData>) => {
@@ -74,61 +72,6 @@ export const TableView = ({ table }: ITableProps<IFetchData>) => {
     set_trig(!trig);
   };
 
-  const onTreeViewItemMenuClick = (idElm: string, elm: IFetchData, parent: IFetchData | IFetchData[] | undefined) => {
-    console.log({
-      idElm,
-      elm,
-      parent,
-    });
-
-    switch (idElm) {
-      case 'folder1':
-        table.hiddenData = {
-          elm: table.hiddenData.elm?.id !== elm.id ? elm : undefined,
-          parent,
-        };
-        break;
-
-      case 'folder2':
-        const tmp = createFakeData();
-        tmp.child.push(createFakeData());
-        if (parent) {
-          elm.child.push(tmp);
-        } else {
-          data.push(tmp);
-        }
-        break;
-
-      case 'doc':
-        if (parent) {
-          elm.child.length !== 0 && elm.child.push(createFakeData());
-        } else {
-          data.push(createFakeData());
-        }
-        break;
-
-      case 'del':
-        let whereFind: IFetchData[] | undefined = undefined;
-        if (Array.isArray(parent)) {
-          whereFind = parent;
-        } else {
-          whereFind = parent?.child;
-        }
-
-        if (whereFind) {
-          const idx = whereFind.findIndex((el) => el.id === elm?.id);
-          idx !== undefined && whereFind.splice(idx, 1);
-          table.hiddenData = { elm: undefined, parent: undefined };
-        }
-        break;
-
-      default:
-        break;
-    }
-
-    set_trig(!trig);
-  };
-
   const renderRow = (key: number, data: IFetchData): React.ReactNode => {
     const { child, ...dataObj } = data;
 
@@ -142,7 +85,7 @@ export const TableView = ({ table }: ITableProps<IFetchData>) => {
       //INFO: из-за этого (<></>)-> Warning: Each child in a list should have a unique "key" prop
       <>
         <Row key={key} data={data} onClick={onCellClick} selData={table.selectedData} />
-        {table.hiddenData.elm?.id !== data.id && child.map((el, idx) => renderRow(key++, el))}
+        {table.hiddenData.elm?.id !== data.id && child?.map((el, idx) => renderRow(key++, el))}
       </>
     );
   };
@@ -152,15 +95,15 @@ export const TableView = ({ table }: ITableProps<IFetchData>) => {
       {/* {state.isPending}
       <>{console.log('result: ', result)}</> */}
 
-      <div className='tree-panel'>
+      {/* <div className='tree-panel'>
         <TreeView data={data} onClick={onTreeViewItemMenuClick} />
-      </div>
-      <div className='data-panel'>
-        <TableHeader data={table.columnsNames} />
-        {data.map((el, idx) => {
-          return renderRow(key++, el); //INFO: ++ именно тут
-        })}
-      </div>
+      </div> */}
+      {/* <div className='data-panel'> */}
+      <TableHeader data={table.columnsNames} />
+      {data.map((el, idx) => {
+        return renderRow(key++, el); //INFO: ++ именно тут
+      })}
+      {/* </div> */}
     </div>
   );
 };
@@ -183,7 +126,7 @@ export const Row = ({ data, selData, onClick }: IRowProps) => {
             name={el}
             row={data}
             isSelected={selData.cellName === el}
-            value={objData[el].toString()}
+            value={objData[el]?.toString() || ''}
             isEdit={selData.row?.id === data.id && selData.cellName === el && selData.isEdit}
           />
         );
