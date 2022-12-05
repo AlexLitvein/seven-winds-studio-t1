@@ -1,67 +1,55 @@
-import React from "react";
-import "./App.scss";
-import { Header } from "./components/header";
-import { TableView } from "./components/TableView/TableView";
-import { createFakeData, IFetchData } from "./fetch";
-import { Table } from "./Table";
-// import { TreeView, RowMenu, Row, Table, Cell } from "./components/TreeView";
-
-// {
-//   name: "111",
-//   child: [],
-// },
-// {
-//   name: "222",
-//   child: [
-//     {
-//       name: "2-11",
-//       child: [
-//         {
-//           name: "2-1-1",
-//           child: [],
-//         },
-//         {
-//           name: "2-1-2",
-//           child: [],
-//         },
-//       ],
-//     },
-//     {
-//       name: "2-22",
-//       child: [],
-//     },
-//   ],
-// },
+import React, { useEffect, useState } from 'react';
+import { IFetchData, FetchDataProxy } from './api/api.types';
+import './App.scss';
+import { Header } from './components/header';
+import { TableView } from './components/TableView/TableView';
+import { Table } from './Table';
 
 // 185.244.172.108:8081
-// const entity = {
-//   id: 31336,
-//   rowName: "dd58a48a-9924-4f76-a605-ad213c5b41a8",
-// };
+type Entity = {
+  id: number;
+  rowName: string; // "dd58a48a-9924-4f76-a605-ad213c5b41a8",
+};
 
-// export type Entity = {
-//   name: string;
-//   child: Entity[];
-// };
+// const treeData: IFetchData[] = [createFakeData(), createFakeData()];
+const treeData: IFetchData[] = [];
+// treeData[0].child.push(createFakeData());
+// treeData[0].child.push(createFakeData());
+// treeData[0].child.push(createFakeData());
 
-const treeData: IFetchData[] = [createFakeData(), createFakeData()];
-
-treeData[0].child.push(createFakeData());
-treeData[0].child.push(createFakeData());
-treeData[0].child.push(createFakeData());
-
-const tbl = new Table(treeData);
+const tbl = new Table<IFetchData>(Object.keys(FetchDataProxy));
 
 function App() {
+  console.log('App: ');
+  let [trig, set_trig] = useState(false); // только для отрисовки
+
+  // http://185.244.172.108:8081/v1/outlay-rows/entity/    4/row/list
+  // http://185.244.172.108:8081/v1/outlay-rows/entity/create
+
+  // const state = useRequest<Entity>('http://185.244.172.108:8081/v1/outlay-rows/entity/', 'POST', 'create');
+
+  useEffect(() => {
+    console.log('useEffect');
+
+    tbl.setData(treeData);
+    set_trig(!trig);
+
+    //   if (state.isFulfilled) {
+    //     console.log('useEffect isFulfilled');
+    //     tbl.setData(treeData);
+    //     set_trig(!trig);
+    //   }
+    // }, [state]);
+  }, []);
+
   return (
-    <div className="App">
+    <div className='App'>
       {/* <Header></Header> */}
       {/* <RowMenu /> */}
       {/* <TreeView data={treeData} /> */}
 
-      {/* <Table columnsNamesObj={treeData[0]} data={treeData} /> */}
-      {/* <TableView columnsNames={tbl.columnsName} data={treeData} /> */}
-      <TableView table={tbl} data={treeData} />
+      {/* <TableView table={tbl} data={treeData} /> */}
+      <TableView table={tbl} />
     </div>
   );
 }

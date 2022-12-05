@@ -1,17 +1,13 @@
-import { IFetchData, IFetchObjData } from "../../fetch";
-import { SelectedData, Table } from "../../Table";
+import { IFetchData } from '../../api/api.types';
+import { SelectedData, Table } from '../../Table';
 
-export type CellClick = (
-  cellName: string,
-  value: string | number,
-  row: IFetchData | undefined,
-  isDblClick: boolean
-) => void;
+export type CellClickCb = (cellName: string, value: string, row: IFetchData | undefined, isDblClick: boolean) => void;
 
-export interface ITableProps {
-  table: Table;
-  // columnsNames: string[];
-  data: IFetchData[];
+export type CellInputCb = (cellName: string, value: string, row: IFetchData | undefined) => void;
+
+export interface ITableProps<T> {
+  table: Table<T>;
+  // data: T[];
 }
 
 export interface IRowProps {
@@ -20,7 +16,7 @@ export interface IRowProps {
   selData: SelectedData;
   // isSelected: boolean;
   // selectedCellName?: string;
-  onClick: CellClick;
+  onClick: CellClickCb;
 }
 
 export interface ITableHeaderProps {
@@ -30,10 +26,21 @@ export interface ITableHeaderProps {
 
 export interface ICellProps {
   name: string;
+  // name: FetchDataKey;
   row: IFetchData | undefined;
+  // row: IFetchData;
   isSelected: boolean;
   isEdit: boolean;
   //   children?: React.ReactNode;
-  value: string | number;
-  onClick: CellClick;
+  // value: string | number;
+  value: string;
+  onClick: CellClickCb;
+  // onInput: CellInput;
+  onEnter: CellInputCb;
+}
+
+export interface ICellIputProps {
+  value: string;
+  // onClick: CellClickCb;
+  onEnter: (value: string) => void;
 }

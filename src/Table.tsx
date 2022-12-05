@@ -1,4 +1,4 @@
-import { IFetchData } from './fetch';
+import { IFetchData } from './api/api.types';
 
 export type HiddenData = {
   elm: IFetchData | undefined;
@@ -9,25 +9,34 @@ export type SelectedData = {
   row: IFetchData | undefined;
   cellName: string | undefined;
   isEdit: boolean;
-  // parent: IFetchData | IFetchData[] | undefined;
+  value: string;
 };
 
-export class Table {
-  private readonly _data: IFetchData[] = [];
-  private readonly _columnsNames: string[] = [];
+export class Table<T> {
+  private _data: T[] = [];
+  private _columnsNames: string[] = [];
 
   private _hiddenData: HiddenData = { elm: undefined, parent: undefined };
   private _selectedData: SelectedData = {
     row: undefined,
     cellName: undefined,
     isEdit: false,
+    value: '',
   };
 
-  constructor(data: IFetchData[]) {
-    const { child, ...objData } = data[0];
+  //=========  constructor ==============
+  constructor(columnsName: string[]) {
+    this._columnsNames = [...columnsName];
+  }
 
-    this._data = data;
-    this._columnsNames = Object.keys(objData);
+  setData(data: T[] | undefined) {
+    console.log('setData->', {
+      data,
+    });
+
+    if (data?.length) {
+      this._data = data;
+    }
   }
 
   get data() {
@@ -54,6 +63,10 @@ export class Table {
     // }
     if (this._selectedData.isEdit && selectedData.cellName === this._selectedData.cellName) {
       selectedData.isEdit = true;
+    }
+
+    if (this._selectedData.value !== selectedData.value) {
+      selectedData.isEdit = false;
     }
     // else {
     //   selectedData.isEdit = true;

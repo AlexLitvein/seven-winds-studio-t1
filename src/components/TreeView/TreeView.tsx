@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { RowMenu } from "./RowMenu";
-import { ITreeItemProps, ITreeViewProps } from "./TreeView.types";
-import { IFetchData } from "../../fetch";
-import "./TreeView.style.scss";
+import React, { useState, useEffect } from 'react';
+import { RowMenu } from './RowMenu';
+import { ITreeItemProps, ITreeViewProps } from './TreeView.types';
+import './TreeView.style.scss';
+import { IFetchData } from '../../api/api.types';
 
 export const TreeView = ({ data, onClick }: ITreeViewProps) => {
   return (
-    <ul className="tree">
+    <ul className='tree'>
       <TreeItem
         key={-1}
-        data={{ rowName: "Level", child: [] as IFetchData[] } as IFetchData}
+        data={{ rowName: 'Level', child: [] as IFetchData[] } as IFetchData}
         parent={undefined}
         level={0}
         // i={gIdx}
@@ -43,7 +43,7 @@ export const TreeItem = ({ data, parent, level, onClick }: ITreeItemProps) => {
           level={level++}
           isNode={data.child.length !== 0 || parent === undefined}
           onClick={(event) => {
-            if (event.currentTarget.id === "folder1") {
+            if (event.currentTarget.id === 'folder1') {
               set_isHidden(!isHidden);
             }
             onClick(event.currentTarget.id, data, parent);
